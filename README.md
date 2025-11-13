@@ -13,10 +13,10 @@ S'en suit toujours le même dialogue:
 
 Etcetera, etcetera...
 
-Bref, via cette application, les premiers arrivés à la plage peuvent signaler aux autres les éventuelles gênes rencontrées sur place.
-L'application se veut simple: présence de ***sargasses, vagues importantes, bruit ou foule*** sont les seules critères qui peuvent être signalés.
+Via cette application, les premiers arrivés à la plage peuvent signaler aux autres les éventuelles gênes rencontrées sur place.
+L'application se veut simple: présence de ***sargasses, vagues importantes, bruit ou foule*** sont les seuls critères qui peuvent être signalés.
 
-Pourquoi ne pas avoir ajouté la météo? Parce que celle-ci change vite. Il serait dommage que beaucoup renoncent à se rendre sur telle ou telle plage, au détriment des commerçants ou de la vie locale, alors qu'une forte pluie peut laisser place à un ciel radieux en quelques minutes seulement!
+Pourquoi ne pas avoir ajouté la météo? Parce que celle-ci change vite. Il serait dommage que certains renoncent à se rendre sur telle ou telle plage, au détriment des commerçants ou de la vie locale, alors qu'une forte pluie peut laisser place à un ciel radieux en quelques minutes seulement!
 
 Avec des filtres intelligents et un partage **WhatsApp**, vous trouverez la plage parfaite sans surprise.
 
