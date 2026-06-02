@@ -69,3 +69,5 @@ bin/node_modules
 bin/serviceAccountKey.json
 
 latest
+cmdline-tools.zip
+flutter_linux_*.tar.xz

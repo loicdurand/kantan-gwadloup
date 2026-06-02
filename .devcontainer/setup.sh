@@ -10,8 +10,9 @@ sudo apt-get update && sudo apt-get install -y curl git unzip xz-utils zip libgl
 
 # Installation Flutter (stable 3.27.0)
 FLUTTER_VERSION="3.27.0"
-curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}.tar.xz
-tar xf flutter_linux_${FLUTTER_VERSION}.tar.xz
+FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/${FLUTTER_ARCHIVE}
+tar xf ${FLUTTER_ARCHIVE}
 sudo mv flutter /opt/flutter
 sudo chown -R ubuntu:ubuntu /opt/flutter
 echo 'export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"' >> /home/ubuntu/.bashrc
@@ -19,13 +20,15 @@ source /home/ubuntu/.bashrc
 
 # Installation Android SDK CLI (manuel, sans feature)
 export ANDROID_HOME=/opt/android-sdk
-mkdir -p $ANDROID_HOME/cmdline-tools
+sudo mkdir -p $ANDROID_HOME/cmdline-tools
+sudo chown -R ubuntu:ubuntu $ANDROID_HOME
 cd $ANDROID_HOME/cmdline-tools
 
 # Télécharge SDK Tools stable (34.0.5)
 wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
 unzip cmdline-tools.zip
 mv cmdline-tools latest
+rm -f cmdline-tools.zip
 chmod +x $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
 
 # Acceptation licences
@@ -42,6 +45,7 @@ sudo apt-get install -y nodejs
 sudo npm install -g firebase-tools@13.7.0
 
 # Config Flutter
+export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
 flutter precache
 flutter doctor --android-licenses
 
