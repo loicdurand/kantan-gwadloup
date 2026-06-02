@@ -1,18 +1,21 @@
 #!/bin/bash
 
-sudo useradd -m -s /bin/bash vscode
+git init 2>/dev/null || true
+
+# L'utilisateur 'ubuntu' existe déjà dans l'image. La ligne ci-dessous n'est plus utile
+# sudo useradd -m -s /bin/bash ubuntu
 
 # Mise à jour et paquets de base
 sudo apt-get update && sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa wget
 
-# Installation Flutter (stable 3.24.5)
-FLUTTER_VERSION="3.24.5-stable"
+# Installation Flutter (stable 3.27.0)
+FLUTTER_VERSION="3.27.0"
 curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}.tar.xz
 tar xf flutter_linux_${FLUTTER_VERSION}.tar.xz
 sudo mv flutter /opt/flutter
-sudo chown -R vscode:vscode /opt/flutter
-echo 'export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"' >> /home/vscode/.bashrc
-source /home/vscode/.bashrc
+sudo chown -R ubuntu:ubuntu /opt/flutter
+echo 'export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"' >> /home/ubuntu/.bashrc
+source /home/ubuntu/.bashrc
 
 # Installation Android SDK CLI (manuel, sans feature)
 export ANDROID_HOME=/opt/android-sdk
