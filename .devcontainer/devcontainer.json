@@ -9,14 +9,14 @@
   "remoteUser": "ubuntu",
 
   "name": "Flutter CLI Development with Firebase (Headless)",
-  "features": {
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/java:1": {
-      "version": "21", // OpenJDK 21 stable pour Android builds
-      "installMaven": false,
-      "installGradle": false,
-    },
-  },
+  // "features": {
+  //   "ghcr.io/devcontainers/features/git:1": {},
+  //   "ghcr.io/devcontainers/features/java:1": {
+  //     "version": "21", // OpenJDK 21 stable pour Android builds
+  //     "installMaven": false,
+  //     "installGradle": false,
+  //   },
+  // },
   "mounts": [
     "source=/home/loic/.gitconfig,target=/home/ubuntu/.gitconfig,type=bind,consistency=cached",
     "source=${localWorkspaceFolder}/,target=/workspace/${localWorkspaceFolderBasename}/,type=bind,consistency=cached",
