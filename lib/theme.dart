@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    useMaterial3: true,
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(
       primary: Colors.orange.shade700,
@@ -10,7 +11,6 @@ class AppTheme {
       surface: Colors.white,
     ),
     scaffoldBackgroundColor: Colors.grey.shade50,
-    cardColor: Colors.white,
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: Colors.black87),
       titleLarge: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -23,6 +23,7 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
+    useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: ColorScheme.dark(
       primary: Colors.orange.shade600,
@@ -30,7 +31,6 @@ class AppTheme {
       surface: Colors.grey.shade900,
     ),
     scaffoldBackgroundColor: Colors.grey.shade800,
-    cardColor: Colors.grey.shade900,
     textTheme: const TextTheme(
       bodyMedium: TextStyle(color: Colors.white70),
       titleLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

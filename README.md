@@ -111,4 +111,4 @@ MIT License — Voir [LICENSE](LICENSE).
 
 - **Développé avec passion par Loïc Durand** — Créateur et mainteneur.
 - **Images gracieusement fournies par Tomomi Sato** — Photographe locale.
-- **Aide technique** : Grok (xAI) pour le debugging et la formation - c'était mon premier projet Flutter! 
+- **Aide technique** : Grok (xAI) pour le debugging et la formation - c'était mon premier projet Flutter!

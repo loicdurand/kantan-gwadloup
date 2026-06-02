@@ -55,7 +55,7 @@ class _ReportScreenState extends State<ReportScreen> {
             width: 2,
           ),
           borderRadius: BorderRadius.circular(20),
-          color: Theme.of(context).cardColor, // ← Fond dynamique
+          color: Theme.of(context).colorScheme.surface,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withValues(alpha: 0.2),

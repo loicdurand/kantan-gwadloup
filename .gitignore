@@ -67,3 +67,5 @@ coverage/
 # Fixtures
 bin/node_modules
 bin/serviceAccountKey.json
+
+latest
