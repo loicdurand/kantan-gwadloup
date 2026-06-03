@@ -22,6 +22,13 @@ pubspec.lock  # Optionnel : si tu veux ignorer les versions lockées (pas recomm
 *.ipr
 *.iws
 
+# Claude Code (config locale)
+.claude/
+
+# Flutter (générés automatiquement)
+.flutter-plugins
+.flutter-plugins-dependencies
+
 # OS
 .DS_Store
 .DS_Store?

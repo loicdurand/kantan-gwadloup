@@ -2,11 +2,11 @@
 
 git init 2>/dev/null || true
 
-# L'utilisateur 'ubuntu' existe déjà dans l'image. La ligne ci-dessous n'est plus utile
-# sudo useradd -m -s /bin/bash ubuntu
+# Mise à jour et paquets de base (inclut JDK 17 pour le SDK Android)
+sudo apt-get update && sudo apt-get install -y cmake curl git unzip xz-utils zip libglu1-mesa wget openjdk-17-jdk-headless
 
-# Mise à jour et paquets de base
-sudo apt-get update && sudo apt-get install -y curl git unzip xz-utils zip libglu1-mesa wget
+# JAVA_HOME doit être défini avant toute utilisation du SDK Android
+export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
 
 # Installation Flutter (stable 3.27.0)
 FLUTTER_VERSION="3.27.0"
@@ -15,16 +15,23 @@ curl -O https://storage.googleapis.com/flutter_infra_release/releases/stable/lin
 tar xf ${FLUTTER_ARCHIVE}
 sudo mv flutter /opt/flutter
 sudo chown -R ubuntu:ubuntu /opt/flutter
-echo 'export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"' >> /home/ubuntu/.bashrc
-source /home/ubuntu/.bashrc
 
-# Installation Android SDK CLI (manuel, sans feature)
+# ANDROID_HOME doit être défini dans le shell courant AVANT son utilisation
 export ANDROID_HOME=/opt/android-sdk
+
+# Persistance dans .bashrc : ANDROID_HOME en premier pour que PATH puisse le référencer
+grep -q 'ANDROID_HOME' /home/ubuntu/.bashrc || {
+  echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> /home/ubuntu/.bashrc
+  echo 'export ANDROID_HOME=/opt/android-sdk' >> /home/ubuntu/.bashrc
+  echo 'export PATH="$PATH:/opt/flutter/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"' >> /home/ubuntu/.bashrc
+}
+
+# Installation Android SDK CLI
 sudo mkdir -p $ANDROID_HOME/cmdline-tools
 sudo chown -R ubuntu:ubuntu $ANDROID_HOME
 cd $ANDROID_HOME/cmdline-tools
 
-# Télécharge SDK Tools stable (34.0.5)
+# Télécharge SDK Tools
 wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O cmdline-tools.zip
 unzip cmdline-tools.zip
 mv cmdline-tools latest
@@ -34,7 +41,7 @@ chmod +x $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager
 # Acceptation licences
 yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
-# Installation paquets essentiels (stable, récents)
+# Installation paquets essentiels
 $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmake;3.22.1"
 
 # Installation Node.js 22.x LTS
@@ -45,7 +52,7 @@ sudo apt-get install -y nodejs
 sudo npm install -g firebase-tools@13.7.0
 
 # Config Flutter
-export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
+export PATH="$PATH:/opt/flutter/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"
 flutter precache
 flutter doctor --android-licenses
 
