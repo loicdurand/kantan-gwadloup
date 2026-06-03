@@ -1,4 +1,4 @@
-# Kantan Gwadloup! - *Profite de la Guadeloupe!* 🏝️
+# Sargassoti - *Profite de la Guadeloupe!* 🏝️
 
 <img src="https://storage.googleapis.com/cms-storage-bucket/flutter-logo.6a07d8a62f4308d2b854.svg" alt="Flutter's logo" style=";height:1.5em;">&nbsp;[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -40,8 +40,8 @@ Avec des filtres intelligents et un partage **WhatsApp**, vous trouverez la plag
 
 1. **Cloner le repo** :
    ```
-   git clone https://github.com/loicdurand/kantan-gwadloup.git
-   cd kantan-gwadloup
+   git clone https://github.com/loicdurand/sargassoti.git
+   cd sargassoti
    ```
 
 2. **Installer les dépendances** :

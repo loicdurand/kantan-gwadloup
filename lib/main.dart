@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: Consumer2<ThemeProvider, TermsProvider>(
         builder: (context, themeProvider, termsProvider, child) {
           return MaterialApp(
-            title: 'Sable & Sargasses',
+            title: 'Sargassoti',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,

@@ -43,7 +43,7 @@ class _TermsScreenState extends State<TermsScreen> {
                     _sectionTitle('1. Objet', colorScheme),
                     const SizedBox(height: 4),
                     _sectionBody(
-                      'L\'application Kantan Gwadloup (dit « Sable & Sargasses ») est un outil '
+                      'L\'application Sargassoti est un outil '
                       'de signalement participatif permettant aux utilisateurs de consulter et de '
                       'partager des informations sur les conditions des plages de Guadeloupe : '
                       'niveaux de sargasses, de vagues, d\'affluence et de bruit. '

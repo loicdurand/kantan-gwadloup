@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         child: const Center(
           child: Text(
-            'Kantan Gwadloup!',
+            'Sargassoti',
             style: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
