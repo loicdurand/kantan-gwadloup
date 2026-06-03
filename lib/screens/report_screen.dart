@@ -1,6 +1,10 @@
 // lib/screens/report_screen.dart
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import '../models/beach_report.dart';
 import '../services/firestore_service.dart';
 import '../providers/auth_provider.dart';
@@ -25,6 +29,8 @@ class _ReportScreenState extends State<ReportScreen> {
   int rating = 3;
   final commentController = TextEditingController();
   String? selectedBeach;
+  String? _compressedPhotoPath; // Chemin de la photo compressée
+  bool _isSending = false;
 
   final Map<int, String> levelLabels = {
     0: 'Aucun',
@@ -41,6 +47,28 @@ class _ReportScreenState extends State<ReportScreen> {
     }
     if (widget.imagePath != null) {
       imagePath = widget.imagePath;
+    }
+  }
+
+  /// Ouvre l'appareil photo, compresse l'image en 720p et stocke le chemin.
+  Future<void> _takePhoto() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.camera);
+    if (picked == null) return;
+
+    // Compression en 720p (1280×720), qualité 80
+    final compressed = await FlutterImageCompress.compressAndGetFile(
+      picked.path,
+      '${picked.path}_compressed.jpg',
+      minWidth: 1280,
+      minHeight: 720,
+      quality: 80,
+    );
+
+    if (compressed != null) {
+      setState(() {
+        _compressedPhotoPath = compressed.path;
+      });
     }
   }
 
@@ -177,11 +205,29 @@ class _ReportScreenState extends State<ReportScreen> {
             ...comments.map((r) {
               final tile = ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: Text('"${r.comment}"',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey[700])),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (r.photoBase64 != null) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.memory(
+                          base64Decode(r.photoBase64!),
+                          height: 120,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    Text('"${r.comment}"',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey[700])),
+                  ],
+                ),
                 subtitle: Text(_timeAgo(r.timestamp),
                     style: TextStyle(fontSize: 12, color: Colors.grey[600])),
               );
@@ -249,7 +295,9 @@ class _ReportScreenState extends State<ReportScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Donner un avis')),
-      body: SingleChildScrollView(
+      body: _isSending
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
@@ -331,6 +379,59 @@ class _ReportScreenState extends State<ReportScreen> {
               ),
               maxLines: 3,
             ),
+            const SizedBox(height: 16),
+
+            // Bouton caméra + aperçu photo
+            if (_compressedPhotoPath == null)
+              OutlinedButton.icon(
+                onPressed: _takePhoto,
+                icon: const Icon(Icons.camera_alt),
+                label: const Text('Ajouter une photo'),
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              )
+            else
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.file(
+                          File(_compressedPhotoPath!),
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: 4,
+                        right: 4,
+                        child: IconButton(
+                          icon: const Icon(Icons.close, color: Colors.white),
+                          style: IconButton.styleFrom(
+                            backgroundColor: Colors.black54,
+                            padding: const EdgeInsets.all(4),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _compressedPhotoPath = null;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  TextButton.icon(
+                    onPressed: _takePhoto,
+                    icon: const Icon(Icons.refresh, size: 16),
+                    label: const Text('Reprendre la photo'),
+                  ),
+                ],
+              ),
             const SizedBox(height: 32), // Marge généreuse
 
             // Derniers commentaires
@@ -376,12 +477,13 @@ class _ReportScreenState extends State<ReportScreen> {
                       return;
                     }
 
+                    final beachId = selectedBeach!
+                        .toLowerCase()
+                        .trim()
+                        .replaceAll(RegExp(r'\s+'), '-');
+
                     final canAdd = await firestore.canAddReport(
-                        userId,
-                        selectedBeach!
-                            .toLowerCase()
-                            .trim()
-                            .replaceAll(' ', '-'));
+                        userId, beachId);
                     if (!canAdd) {
                       if (!context.mounted) return;
                       showDialog(
@@ -400,11 +502,28 @@ class _ReportScreenState extends State<ReportScreen> {
                       return;
                     }
 
+                    // Encodage de la photo en base64 si présente
+                    String? photoBase64;
+                    if (_compressedPhotoPath != null) {
+                      setState(() => _isSending = true);
+                      try {
+                        final bytes = await File(_compressedPhotoPath!).readAsBytes();
+                        photoBase64 = base64Encode(bytes);
+                      } catch (e) {
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Erreur lors du traitement de la photo : $e')),
+                        );
+                        setState(() => _isSending = false);
+                        return;
+                      }
+                      setState(() => _isSending = false);
+                    }
+
                     firestore.addReport(BeachReport(
-                      beachId: selectedBeach!.toLowerCase().trim().replaceAll(
-                          RegExp(r'\s+'),
-                          '-'), // ← Remplace 1+ espaces par UN '-'
-                      // .replaceAll(RegExp(r'-+'), '-'),
+                      beachId: beachId,
                       beachName: selectedBeach!,
                       sargassesLevel: sargassesLevel,
                       wavesLevel: wavesLevel,
@@ -414,6 +533,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       comment: commentController.text.isEmpty
                           ? null
                           : commentController.text,
+                      photoBase64: photoBase64,
                       userId: FirebaseAuth.instance.currentUser?.uid,
                       timestamp: DateTime.now(),
                     ));

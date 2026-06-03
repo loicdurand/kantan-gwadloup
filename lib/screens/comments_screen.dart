@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../models/beach_report.dart';
 import '../services/firestore_service.dart';
@@ -50,9 +51,27 @@ class CommentsScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final report = reports[index];
               return ListTile(
-                title: Text(
-                  '"${report.comment}"',
-                  style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (report.photoBase64 != null) ...[
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.memory(
+                          base64Decode(report.photoBase64!),
+                          height: 150,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                    Text(
+                      '"${report.comment}"',
+                      style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic),
+                    ),
+                  ],
                 ),
                 subtitle: Text(
                   _timeAgo(report.timestamp),
