@@ -1,4 +1,5 @@
 class BeachReport {
+  final String? documentId; // ID du document Firestore (non persisté)
   final String? imagePath;
   final String beachId;
   final String beachName;
@@ -12,6 +13,7 @@ class BeachReport {
   final DateTime timestamp;
 
   BeachReport({
+    this.documentId,
     this.imagePath,
     required this.beachId,
     required this.beachName,
@@ -39,7 +41,8 @@ class BeachReport {
         'timestamp': timestamp.toIso8601String(),
       };
 
-  factory BeachReport.fromJson(Map<String, dynamic> json) => BeachReport(
+  factory BeachReport.fromJson(Map<String, dynamic> json, {String? documentId}) => BeachReport(
+        documentId: documentId,
         imagePath: json['imagePath'],
         beachId: json['beachId'],
         beachName: json['beachName'],

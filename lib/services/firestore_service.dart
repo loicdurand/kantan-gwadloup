@@ -16,7 +16,7 @@ class FirestoreService {
         // .limit(3)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => BeachReport.fromJson(doc.data()))
+            .map((doc) => BeachReport.fromJson(doc.data(), documentId: doc.id))
             .toList());
   }
 
@@ -90,5 +90,11 @@ class FirestoreService {
       }
       return counts;
     });
+  }
+
+  /// Supprime un signalement par son ID de document Firestore.
+  /// Réservé aux administrateurs.
+  Future<void> deleteReport(String documentId) async {
+    await reports.doc(documentId).delete();
   }
 }

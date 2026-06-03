@@ -1,7 +1,9 @@
 // lib/screens/report_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/beach_report.dart';
 import '../services/firestore_service.dart';
+import '../providers/auth_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'comments_screen.dart';
 
@@ -148,6 +150,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Widget _buildRecentComments(String beachId) {
     final firestore = FirestoreService();
+    final authProvider = Provider.of<AdminAuthProvider>(context);
     return StreamBuilder<List<BeachReport>>(
       stream: firestore.getReports(beachId),
       builder: (context, snapshot) {
@@ -169,16 +172,27 @@ class _ReportScreenState extends State<ReportScreen> {
             const Text('Derniers commentaires laissés :',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            ...comments.map((r) => ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text('"${r.comment}"',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.grey[700])),
-                  subtitle: Text(_timeAgo(r.timestamp),
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                )),
+            ...comments.map((r) {
+              final tile = ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text('"${r.comment}"',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey[700])),
+                subtitle: Text(_timeAgo(r.timestamp),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+              );
+
+              // Long-press pour supprimer, uniquement pour les admins
+              if (authProvider.isAdmin && r.documentId != null) {
+                return GestureDetector(
+                  onLongPress: () => _confirmDeleteComment(r),
+                  child: tile,
+                );
+              }
+              return tile;
+            }),
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => Navigator.push(
@@ -193,6 +207,37 @@ class _ReportScreenState extends State<ReportScreen> {
           ],
         );
       },
+    );
+  }
+
+  void _confirmDeleteComment(BeachReport report) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Supprimer ce commentaire ?'),
+        content: Text('« ${report.comment} »\n\nCette action est irréversible.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              if (report.documentId != null) {
+                await FirestoreService().deleteReport(report.documentId!);
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Commentaire supprimé')),
+                  );
+                }
+              }
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Supprimer'),
+          ),
+        ],
+      ),
     );
   }
 
