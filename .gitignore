@@ -75,3 +75,5 @@ bin/serviceAccountKey.json
 latest
 cmdline-tools.zip
 flutter_linux_*.tar.xz
+pubspec.lock
+.flutter-plugins-dependencies
