@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'theme.dart';
 import 'providers/theme_provider.dart';
 import 'providers/terms_provider.dart';
+import 'providers/auth_provider.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => TermsProvider()),
+        ChangeNotifierProvider(create: (_) => AdminAuthProvider()),
       ],
       child: Consumer2<ThemeProvider, TermsProvider>(
         builder: (context, themeProvider, termsProvider, child) {
