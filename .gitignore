@@ -61,9 +61,11 @@ web/*.map
 
 # Android
 android/.gradle/
+android/.kotlin/
 android/local.properties
 android/key.properties
 android/app/src/debug/
+android/app/build.gradle.kts
 
 # iOS
 ios/.build/
