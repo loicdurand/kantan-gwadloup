@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/beach_report.dart';
 
 class FirestoreService {
-  final CollectionReference reports =
+  final CollectionReference<Map<String, dynamic>> reports =
       FirebaseFirestore.instance.collection('reports');
 
   Future<void> addReport(BeachReport report) async {
@@ -16,8 +16,7 @@ class FirestoreService {
         // .limit(3)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) =>
-                BeachReport.fromJson(doc.data() as Map<String, dynamic>))
+            .map((doc) => BeachReport.fromJson(doc.data()))
             .toList());
   }
 
@@ -28,7 +27,7 @@ class FirestoreService {
         .limit(1)
         .get();
     return snapshot.docs
-        .map((doc) => BeachReport.fromJson(doc.data() as Map<String, dynamic>))
+        .map((doc) => BeachReport.fromJson(doc.data()))
         .toList();
   }
 

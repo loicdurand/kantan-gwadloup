@@ -12,15 +12,19 @@ android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
 lib/firebase_options.dart
 
-# pubspec
-pubspec.lock  # Optionnel : si tu veux ignorer les versions lockées (pas recommandé pour prod)
-
 # IDE
 .vscode/
 .idea/
 *.iml
 *.ipr
 *.iws
+
+# Claude Code (config locale)
+.claude/
+
+# Flutter (générés automatiquement)
+.flutter-plugins
+.flutter-plugins-dependencies
 
 # OS
 .DS_Store
@@ -67,3 +71,7 @@ coverage/
 # Fixtures
 bin/node_modules
 bin/serviceAccountKey.json
+
+latest
+cmdline-tools.zip
+flutter_linux_*.tar.xz
