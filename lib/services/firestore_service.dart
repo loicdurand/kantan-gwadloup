@@ -97,4 +97,10 @@ class FirestoreService {
   Future<void> deleteReport(String documentId) async {
     await reports.doc(documentId).delete();
   }
+
+  /// Supprime la photo d'un signalement en mettant photoBase64 à null.
+  /// Réservé aux administrateurs.
+  Future<void> deleteReportPhoto(String documentId) async {
+    await reports.doc(documentId).update({'photoBase64': null});
+  }
 }
