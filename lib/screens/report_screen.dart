@@ -154,8 +154,9 @@ class _ReportScreenState extends State<ReportScreen> {
     return StreamBuilder<List<BeachReport>>(
       stream: firestore.getReports(beachId),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox.shrink();
+        }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Text('Aucun commentaire pour cette plage.');
         }
@@ -163,8 +164,9 @@ class _ReportScreenState extends State<ReportScreen> {
         final comments =
             snapshot.data!.where((r) => r.comment != null).take(3).toList();
 
-        if (comments.isEmpty)
+        if (comments.isEmpty) {
           return const Text('Aucun commentaire pour cette plage.');
+        }
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -381,6 +383,7 @@ class _ReportScreenState extends State<ReportScreen> {
                             .trim()
                             .replaceAll(' ', '-'));
                     if (!canAdd) {
+                      if (!context.mounted) return;
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
@@ -414,6 +417,7 @@ class _ReportScreenState extends State<ReportScreen> {
                       userId: FirebaseAuth.instance.currentUser?.uid,
                       timestamp: DateTime.now(),
                     ));
+                    if (!context.mounted) return;
                     Navigator.pop(context);
                   }
                 },
