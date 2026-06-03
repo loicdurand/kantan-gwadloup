@@ -329,14 +329,19 @@ class _ReportScreenState extends State<ReportScreen> {
                       return;
                     }
 
-                    final canAdd = await firestore.canAddReport(userId);
+                    final canAdd = await firestore.canAddReport(
+                        userId,
+                        selectedBeach!
+                            .toLowerCase()
+                            .trim()
+                            .replaceAll(' ', '-'));
                     if (!canAdd) {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text('Limite atteinte'),
                           content: const Text(
-                              'Vous pouvez soumettre un avis seulement une fois toutes les 2 heures.'),
+                              'Vous pouvez soumettre un avis pour la même plage toutes les 2 heures, ou pour une plage différente toutes les 15 minutes.'),
                           actions: [
                             TextButton(
                                 onPressed: () => Navigator.pop(context),
