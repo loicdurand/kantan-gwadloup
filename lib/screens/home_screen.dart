@@ -4,6 +4,7 @@ import '../widgets/beach_card.dart';
 import '../services/firestore_service.dart';
 import 'report_screen.dart';
 import 'settings_screen.dart';
+import 'terms_screen.dart';
 import '../models/beach_report.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -87,6 +88,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.description),
+              title: const Text('Conditions d\'utilisation'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => const TermsScreen(readOnly: true)),
                 );
               },
             ),
