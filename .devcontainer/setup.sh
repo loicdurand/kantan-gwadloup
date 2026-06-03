@@ -24,6 +24,7 @@ grep -q 'ANDROID_HOME' /home/ubuntu/.bashrc || {
   echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> /home/ubuntu/.bashrc
   echo 'export ANDROID_HOME=/opt/android-sdk' >> /home/ubuntu/.bashrc
   echo 'export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools"' >> /home/ubuntu/.bashrc
+  echo 'export ADB_SERVER_SOCKET=tcp:host.docker.internal:5037' >> /home/ubuntu/.bashrc
 }
 
 # Installation Android SDK CLI
