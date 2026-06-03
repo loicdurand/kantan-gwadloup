@@ -3,7 +3,7 @@
 git init 2>/dev/null || true
 
 # Mise à jour et paquets de base (inclut JDK 17 pour le SDK Android)
-sudo apt-get update && sudo apt-get install -y cmake ninja-build build-essential curl git unzip xz-utils zip libglu1-mesa wget openjdk-17-jdk-headless
+sudo apt-get update && sudo apt-get install -y cmake clang ninja-build build-essential curl git unzip xz-utils zip libglu1-mesa libgtk-3-dev libglib2.0-dev liblzma-dev pkg-config wget openjdk-17-jdk-headless
 
 # JAVA_HOME doit être défini avant toute utilisation du SDK Android
 export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))

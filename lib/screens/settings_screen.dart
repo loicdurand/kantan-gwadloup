@@ -27,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              initialValue: themeProvider.themeMode == ThemeMode.light
+              value: themeProvider.themeMode == ThemeMode.light
                   ? 'light'
                   : themeProvider.themeMode == ThemeMode.dark
                       ? 'dark'
