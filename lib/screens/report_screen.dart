@@ -150,6 +150,39 @@ class _ReportScreenState extends State<ReportScreen> {
     );
   }
 
+  /// Affiche un disclaimer si une photo est présente.
+  /// Retourne true si l'utilisateur confirme, false s'il refuse
+  /// (la photo est alors retirée).
+  Future<bool> _showPhotoDisclaimer() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Confidentialité'),
+        content: const Text(
+          'Je confirme que cette photo ne contient que des images de plage '
+          'et ne montre aucune personne identifiable.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Refuser'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Confirmer'),
+          ),
+        ],
+      ),
+    );
+    if (result != true) {
+      setState(() {
+        _compressedPhotoPath = null;
+      });
+      return false;
+    }
+    return true;
+  }
+
   // Pop-up si tout vide
   void _showEmptyReportDialog() {
     showDialog(
@@ -510,6 +543,11 @@ class _ReportScreenState extends State<ReportScreen> {
                       commentController.text.isEmpty) {
                     _showEmptyReportDialog();
                   } else {
+                    // Disclaimer photo si nécessaire
+                    if (_compressedPhotoPath != null) {
+                      final confirmed = await _showPhotoDisclaimer();
+                      if (!confirmed) return;
+                    }
                     final userId = FirebaseAuth.instance.currentUser?.uid;
 
                     if (userId == null) {
