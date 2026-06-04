@@ -1,4 +1,4 @@
-# Kantan Gwadloup! - *Profite de la Guadeloupe!* 🏝️
+# Sargassoti - *Profite de la Guadeloupe!* 🏝️
 
 <img src="https://storage.googleapis.com/cms-storage-bucket/flutter-logo.6a07d8a62f4308d2b854.svg" alt="Flutter's logo" style=";height:1.5em;">&nbsp;[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -40,8 +40,8 @@ Avec des filtres intelligents et un partage **WhatsApp**, vous trouverez la plag
 
 1. **Cloner le repo** :
    ```
-   git clone https://github.com/loicdurand/kantan-gwadloup.git
-   cd kantan-gwadloup
+   git clone https://github.com/loicdurand/sargassoti.git
+   cd sargassoti
    ```
 
 2. **Installer les dépendances** :
@@ -70,6 +70,37 @@ Avec des filtres intelligents et un partage **WhatsApp**, vous trouverez la plag
 5. **Lancer l'appli** :
    ```
    flutter run
+   ```
+
+## 🐧 Devcontainer
+
+Un devcontainer est fourni pour développer dans un environnement Flutter/Android préconfiguré (VS Code).
+
+### Démarrage
+
+1. Ouvrir le repo dans VS Code et cliquer sur **Reopen in Container**.
+2. L'environnement s'installe automatiquement (Flutter, Android SDK, Firebase CLI).
+
+### Connexion ADB au téléphone (USB)
+
+Le téléphone connecté en USB à la machine hôte n'est pas directement accessible depuis le container. Pour l'utiliser :
+
+1. **Sur l'hôte** — Désactiver le pare-feu UFW et démarrer l'ADB server en mode réseau :
+   ```bash
+   sudo ufw disable
+   adb kill-server && adb -a nodaemon server start &
+   ```
+2. **Dans le container** — La variable `ADB_SERVER_SOCKET` est déjà configurée (`tcp:host.docker.internal:5037`). Vérifier la connexion :
+   ```bash
+   adb devices
+   ```
+3. Lancer l'appli :
+   ```bash
+   flutter run
+   ```
+4. **Après la session** — Réactiver le pare-feu :
+   ```bash
+   sudo ufw enable
    ```
 
 ## 📖 Utilisation

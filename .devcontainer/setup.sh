@@ -3,7 +3,7 @@
 git init 2>/dev/null || true
 
 # Mise à jour et paquets de base (inclut JDK 17 pour le SDK Android)
-sudo apt-get update && sudo apt-get install -y cmake curl git unzip xz-utils zip libglu1-mesa wget openjdk-17-jdk-headless
+sudo apt-get update && sudo apt-get install -y cmake clang ninja-build build-essential curl git unzip xz-utils zip libglu1-mesa libgtk-3-dev libglib2.0-dev liblzma-dev pkg-config wget openjdk-17-jdk-headless
 
 # JAVA_HOME doit être défini avant toute utilisation du SDK Android
 export JAVA_HOME=$(dirname $(dirname $(readlink -f $(which java))))
@@ -23,7 +23,8 @@ export ANDROID_HOME=/opt/android-sdk
 grep -q 'ANDROID_HOME' /home/ubuntu/.bashrc || {
   echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64' >> /home/ubuntu/.bashrc
   echo 'export ANDROID_HOME=/opt/android-sdk' >> /home/ubuntu/.bashrc
-  echo 'export PATH="$PATH:/opt/flutter/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools"' >> /home/ubuntu/.bashrc
+  echo 'export PATH="$PATH:/opt/flutter/bin:/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools"' >> /home/ubuntu/.bashrc
+  echo 'export ADB_SERVER_SOCKET=tcp:host.docker.internal:5037' >> /home/ubuntu/.bashrc
 }
 
 # Installation Android SDK CLI

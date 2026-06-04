@@ -1,5 +1,7 @@
 class BeachReport {
+  final String? documentId; // ID du document Firestore (non persisté)
   final String? imagePath;
+  final String? photoBase64; // Photo encodée en base64 (stockée directement dans Firestore)
   final String beachId;
   final String beachName;
   final int sargassesLevel; // ← 0 à 3
@@ -12,7 +14,9 @@ class BeachReport {
   final DateTime timestamp;
 
   BeachReport({
+    this.documentId,
     this.imagePath,
+    this.photoBase64,
     required this.beachId,
     required this.beachName,
     required this.sargassesLevel,
@@ -27,6 +31,7 @@ class BeachReport {
 
   Map<String, dynamic> toJson() => {
         'imagePath': imagePath,
+        'photoBase64': photoBase64,
         'beachId': beachId,
         'beachName': beachName,
         'sargassesLevel': sargassesLevel,
@@ -39,8 +44,10 @@ class BeachReport {
         'timestamp': timestamp.toIso8601String(),
       };
 
-  factory BeachReport.fromJson(Map<String, dynamic> json) => BeachReport(
+  factory BeachReport.fromJson(Map<String, dynamic> json, {String? documentId}) => BeachReport(
+        documentId: documentId,
         imagePath: json['imagePath'],
+        photoBase64: json['photoBase64'],
         beachId: json['beachId'],
         beachName: json['beachName'],
         sargassesLevel: json['sargassesLevel'],
